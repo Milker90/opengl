@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		791676021E70FE0A001D6F0C /* LineDrawer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineDrawer.mm */; };
 		792F066F1E0CD4D7009D90BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F066E1E0CD4D7009D90BC /* main.m */; };
 		792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06711E0CD4D7009D90BC /* AppDelegate.m */; };
 		792F06751E0CD4D7009D90BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06741E0CD4D7009D90BC /* ViewController.m */; };
@@ -16,7 +17,7 @@
 		792F06861E0CD559009D90BC /* OpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 792F06851E0CD559009D90BC /* OpenGLView.mm */; };
 		792F06881E10BA60009D90BC /* TextrueVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 792F06871E10BA60009D90BC /* TextrueVertex.glsl */; };
 		792F068C1E10BAAE009D90BC /* TextureFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 792F068B1E10BAAE009D90BC /* TextureFragment.glsl */; };
-		79309ED71E10FB320095BA8C /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 79309ECE1E10FB320095BA8C /* CC3Foundation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		79309ED71E10FB320095BA8C /* CC3Foundation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ECE1E10FB320095BA8C /* CC3Foundation.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		79309ED81E10FB320095BA8C /* CC3GLMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED01E10FB320095BA8C /* CC3GLMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED11E10FB320095BA8C /* CC3Kazmath.mm */; };
 		79309EDA1E10FB320095BA8C /* CC3Math.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED51E10FB320095BA8C /* CC3Math.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -168,6 +169,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		791676001E70FE0A001D6F0C /* LineDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDrawer.h; sourceTree = "<group>"; };
+		791676011E70FE0A001D6F0C /* LineDrawer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LineDrawer.mm; sourceTree = "<group>"; };
 		792F066A1E0CD4D7009D90BC /* OpenGLForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		792F066E1E0CD4D7009D90BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		792F06701E0CD4D7009D90BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -183,7 +186,7 @@
 		792F06871E10BA60009D90BC /* TextrueVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TextrueVertex.glsl; sourceTree = "<group>"; };
 		792F068B1E10BAAE009D90BC /* TextureFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TextureFragment.glsl; sourceTree = "<group>"; };
 		79309ECD1E10FB320095BA8C /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Foundation.h; sourceTree = "<group>"; };
-		79309ECE1E10FB320095BA8C /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CC3Foundation.m; sourceTree = "<group>"; };
+		79309ECE1E10FB320095BA8C /* CC3Foundation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CC3Foundation.mm; sourceTree = "<group>"; };
 		79309ECF1E10FB320095BA8C /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3GLMatrix.h; sourceTree = "<group>"; };
 		79309ED01E10FB320095BA8C /* CC3GLMatrix.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CC3GLMatrix.mm; sourceTree = "<group>"; };
 		79309ED11E10FB320095BA8C /* CC3Kazmath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CC3Kazmath.mm; sourceTree = "<group>"; };
@@ -500,7 +503,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		792F06611E0CD4D7009D90BC = {
+		791675FD1E70FD8D001D6F0C /* glsl */ = {
 			isa = PBXGroup;
 			children = (
 				79CA83DE1E6FE4B6005C8938 /* CubeFragment.glsl */,
@@ -509,6 +512,43 @@
 				79CA7EF21E693825005C8938 /* ColorVertex.glsl */,
 				792F068B1E10BAAE009D90BC /* TextureFragment.glsl */,
 				792F06871E10BA60009D90BC /* TextrueVertex.glsl */,
+			);
+			name = glsl;
+			sourceTree = "<group>";
+		};
+		791675FE1E70FDBA001D6F0C /* app */ = {
+			isa = PBXGroup;
+			children = (
+				792F06701E0CD4D7009D90BC /* AppDelegate.h */,
+				792F06711E0CD4D7009D90BC /* AppDelegate.m */,
+				792F06731E0CD4D7009D90BC /* ViewController.h */,
+				792F06741E0CD4D7009D90BC /* ViewController.m */,
+				792F06761E0CD4D7009D90BC /* Main.storyboard */,
+				792F06791E0CD4D7009D90BC /* Assets.xcassets */,
+				792F067B1E0CD4D7009D90BC /* LaunchScreen.storyboard */,
+				792F067E1E0CD4D7009D90BC /* Info.plist */,
+				79309EDB1E10FBB90095BA8C /* openGLPre.pch */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
+		791675FF1E70FDCD001D6F0C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				792F06841E0CD559009D90BC /* OpenGLView.h */,
+				792F06851E0CD559009D90BC /* OpenGLView.mm */,
+				79CA7EEE1E691B8D005C8938 /* CShader.h */,
+				79CA7EEF1E691B8D005C8938 /* CShader.m */,
+				791676001E70FE0A001D6F0C /* LineDrawer.h */,
+				791676011E70FE0A001D6F0C /* LineDrawer.mm */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		792F06611E0CD4D7009D90BC = {
+			isa = PBXGroup;
+			children = (
+				791675FD1E70FD8D001D6F0C /* glsl */,
 				792F066C1E0CD4D7009D90BC /* OpenGLForiOS */,
 				79F909791E666A5A0041047D /* OpenGLForiOSTests */,
 				792F066B1E0CD4D7009D90BC /* Products */,
@@ -527,24 +567,13 @@
 		792F066C1E0CD4D7009D90BC /* OpenGLForiOS */ = {
 			isa = PBXGroup;
 			children = (
+				791675FF1E70FDCD001D6F0C /* src */,
+				791675FE1E70FDBA001D6F0C /* app */,
 				79CA824F1E6FC9C3005C8938 /* glm */,
 				79F909AF1E669B320041047D /* Resource */,
 				79F909AB1E669ABD0041047D /* sold */,
 				79309ECC1E10FB320095BA8C /* Cocos3DMathLib */,
-				792F06701E0CD4D7009D90BC /* AppDelegate.h */,
-				792F06711E0CD4D7009D90BC /* AppDelegate.m */,
-				792F06731E0CD4D7009D90BC /* ViewController.h */,
-				792F06741E0CD4D7009D90BC /* ViewController.m */,
-				792F06761E0CD4D7009D90BC /* Main.storyboard */,
-				792F06791E0CD4D7009D90BC /* Assets.xcassets */,
-				792F067B1E0CD4D7009D90BC /* LaunchScreen.storyboard */,
-				792F067E1E0CD4D7009D90BC /* Info.plist */,
 				792F066D1E0CD4D7009D90BC /* Supporting Files */,
-				792F06841E0CD559009D90BC /* OpenGLView.h */,
-				792F06851E0CD559009D90BC /* OpenGLView.mm */,
-				79CA7EEE1E691B8D005C8938 /* CShader.h */,
-				79CA7EEF1E691B8D005C8938 /* CShader.m */,
-				79309EDB1E10FBB90095BA8C /* openGLPre.pch */,
 			);
 			path = OpenGLForiOS;
 			sourceTree = "<group>";
@@ -561,7 +590,7 @@
 			isa = PBXGroup;
 			children = (
 				79309ECD1E10FB320095BA8C /* CC3Foundation.h */,
-				79309ECE1E10FB320095BA8C /* CC3Foundation.m */,
+				79309ECE1E10FB320095BA8C /* CC3Foundation.mm */,
 				79309ECF1E10FB320095BA8C /* CC3GLMatrix.h */,
 				79309ED01E10FB320095BA8C /* CC3GLMatrix.mm */,
 				79309ED11E10FB320095BA8C /* CC3Kazmath.mm */,
@@ -1156,11 +1185,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				791676021E70FE0A001D6F0C /* LineDrawer.mm in Sources */,
 				79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */,
 				792F06751E0CD4D7009D90BC /* ViewController.m in Sources */,
 				792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */,
 				792F066F1E0CD4D7009D90BC /* main.m in Sources */,
-				79309ED71E10FB320095BA8C /* CC3Foundation.m in Sources */,
+				79309ED71E10FB320095BA8C /* CC3Foundation.mm in Sources */,
 				79CA7EF01E691B8D005C8938 /* CShader.m in Sources */,
 				79CA836E1E6FC9C4005C8938 /* glm.cpp in Sources */,
 				792F06861E0CD559009D90BC /* OpenGLView.mm in Sources */,

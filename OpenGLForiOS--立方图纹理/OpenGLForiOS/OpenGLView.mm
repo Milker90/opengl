@@ -390,13 +390,10 @@ GLfloat skyboxVertices[] = {
     glEnable(GL_DEPTH_TEST);
     
     // 1
-    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    
-//    CC3Vector v;
-//    CC3VectorLength(v);
+    glViewport(0, 0, self.frame.size.width, self.frame.size.width);
 
     int screenWidth  = self.frame.size.width;
-    int screenHeight = self.frame.size.height;
+    int screenHeight = self.frame.size.width;
     
     glm::mat4 model;
     glm::mat4 view ;//= camera.GetViewMatrix();
