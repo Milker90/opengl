@@ -216,7 +216,7 @@ GLfloat skyboxVertices[] = {
         
         [self setupVBOs];
         
-//        [self setupDisplayLink];
+        [self setupDisplayLink];
         
         [self render:nil];
     }
@@ -360,16 +360,16 @@ GLfloat skyboxVertices[] = {
     // Setup skybox VAO
     
 //    GLuint skyboxVAO, skyboxVBO;
-    glGenVertexArraysOES(1, &skyboxVAO);
-    glGenBuffers(1, &skyboxVBO);
-    glBindVertexArrayOES(skyboxVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GL_FLOAT), (GLvoid*)0);
-    glBindVertexArrayOES(0);
+//    glGenVertexArraysOES(1, &skyboxVAO);
+//    glGenBuffers(1, &skyboxVBO);
+//    glBindVertexArrayOES(skyboxVAO);
+//    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GL_FLOAT), (GLvoid*)0);
+//    glBindVertexArrayOES(0);
     
-     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"right" ofType:@"jpg"];
+//     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"right" ofType:@"jpg"];
     
     // Cubemap (Skybox)
     NSMutableArray * faces = [[NSMutableArray alloc]init];
@@ -390,12 +390,12 @@ GLfloat skyboxVertices[] = {
     glEnable(GL_DEPTH_TEST);
     
     // 1
-    glViewport(0, 0, self.frame.size.width, self.frame.size.width);
+    glViewport(0, 0, self.frame.size.width, self.frame.size.height);
 
     int screenWidth  = self.frame.size.width;
-    int screenHeight = self.frame.size.width;
+    int screenHeight = self.frame.size.height;
     
-    glm::mat4 model;
+    glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view ;//= camera.GetViewMatrix();
     model = glm::rotate(model, - float(M_PI_4), glm::vec3(1.0f, 1.0f, 0.0f));
     view  = glm::translate(view, glm::vec3(0.0f, -0.3f, -2.5f));

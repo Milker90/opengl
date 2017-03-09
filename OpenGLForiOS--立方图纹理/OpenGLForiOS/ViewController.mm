@@ -27,7 +27,7 @@ CGPoint lastPoint;
     [self.view addSubview:openGLView];
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanFrom:)];
-//    [self.view addGestureRecognizer:panRecognizer];//关键语句，给self.view添加一个手势监测；
+    [self.view addGestureRecognizer:panRecognizer];
     panRecognizer.maximumNumberOfTouches = 1;
     panRecognizer.delegate = self;
 }
