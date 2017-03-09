@@ -44,6 +44,13 @@
         [self setupFrameBuffer];
         
         [self compileShaders];
+        [self createMultiSampleBuffer];
+        
+//        glEnable(GL_DEPTH_TEST);
+        glClearColor(0.95f, 0.95f, 0.91f, 1.0f);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_MULTISAMPLE);
         
         [self render:nil];
     }
@@ -151,6 +158,29 @@
         NSLog(@"Failed to set current OpenGL context");
         exit(1);
     }
+}
+
+-(void)createMultiSampleBuffer{
+    mBackingWidth = self.frame.size.width;
+    mBackingHeight = self.frame.size.height;
+    
+    glGenFramebuffers(1, &sampleFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+    
+    glGenRenderbuffers(1, &sampleColorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, mBackingWidth, mBackingHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glGenRenderbuffers(1, &sampleDepthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleDepthRenderbuffer);
+    
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, mBackingWidth, mBackingHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sampleDepthRenderbuffer);
+    
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
 
 -(void)setupRenderBuffer{
@@ -537,14 +567,15 @@
     [self loadBaseTexture];
     [self loadArrowTexture];
     
-    glClearColor(0.95f, 0.95f, 0.91f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     
     glViewport(0, 0, self.frame.size.width, self.frame.size.width);
     
-    //hahahaha
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    //hahaha
     
     CC3Vector start, to;
     start.x = 100;
@@ -575,6 +606,27 @@
     lines[8] = CC3VectorMake(150, 150, 0);
     
     [self drawRoadLineString:lines pointCount:9 lineWidth:width borderWidth:1.0f];
+    
+    
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _frameBuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, sampleFramebuffer);
+    
+    
+    // opengl 2.0
+    //    glResolveMultisampleFramebufferAPPLE();
+    //    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT};
+    //    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE,2,discards);
+    
+    // opengl 3.0
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_DEPTH_ATTACHMENT});
+    
+    // Copy the read fbo(multisampled framebuffer) to the draw fbo(single-sampled framebuffer)
+    glBlitFramebuffer(0, 0, mBackingWidth, mBackingHeight, 0, 0, mBackingWidth, mBackingHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_COLOR_ATTACHMENT0});
+    
+    //end
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }

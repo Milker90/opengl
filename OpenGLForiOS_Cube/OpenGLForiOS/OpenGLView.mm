@@ -33,6 +33,21 @@ bool firstMouse = true;
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 
+float currentRotate;
+
+glm::vec3 cubePositions[] = {
+    glm::vec3( 0.0f,  0.0f,  0.0f),
+    glm::vec3( 2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3( 2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3( 1.3f, -2.0f, -2.5f),
+    glm::vec3( 1.5f,  2.0f, -2.5f),
+    glm::vec3( 1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
+};
+
 GLfloat cubeVertices[] = {
     // Positions          // Normals
     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -104,11 +119,17 @@ GLfloat cubeVertices[] = {
         [self setupRenderBuffer];
         [self setupFrameBuffer];
         
+        [self createMultiSampleBuffer];
+        
         [self compileShaders];
         
         [self setupCubeVBOs];
         
-//        [self setupDisplayLink];
+        [self setupDisplayLink];
+        
+        glViewport(0, 0, self.frame.size.width, self.frame.size.width);
+        glEnable(GL_DEPTH_TEST);
+//        glEnable(GL_MULTISAMPLE);
         
         [self render:nil];
     }
@@ -168,7 +189,7 @@ GLfloat cubeVertices[] = {
     GLuint _samplerCube = [cubeShader glGetUniformLocation:"s_texture"];
     glUniform1f(_samplerCube, 0);
     
-//    [self setMVPFor2D:cubeShader];
+    [self setMVPFor3D:cubeShader];
 }
 
 -(void)setMVPFor3D:(CShader *)shader{
@@ -182,11 +203,8 @@ GLfloat cubeVertices[] = {
     glm::mat4 view;
     glm::mat4 proj;
     
-//    model = glm::mat4(1.0f);
-//    view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-    
-    model = glm::rotate(model, - float(M_PI_4), glm::vec3(0.0f, 1.0f, 0.0f));
-    view  = glm::translate(view, glm::vec3(-1.5f, 0.2f, -1.5f));
+    model = glm::rotate(model, currentRotate, glm::vec3(0.5f, 1.0f, 0.0f));
+    view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     proj  = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
     
     glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -261,6 +279,29 @@ GLfloat cubeVertices[] = {
     _frameBuffer = 0;
     glDeleteRenderbuffers(1, &_colorRenderBuffer);
     _colorRenderBuffer = 0;
+}
+
+-(void)createMultiSampleBuffer{
+    mBackingWidth = self.frame.size.width;
+    mBackingHeight = self.frame.size.height;
+    
+    glGenFramebuffers(1, &sampleFramebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+    
+    glGenRenderbuffers(1, &sampleColorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, mBackingWidth, mBackingHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    glGenRenderbuffers(1, &sampleDepthRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleDepthRenderbuffer);
+    
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, mBackingWidth, mBackingHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sampleDepthRenderbuffer);
+    
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 }
 
 -(void)loadBaseTexture{
@@ -621,20 +662,58 @@ GLfloat cubeVertices[] = {
 }
 
 - (void)render:(CADisplayLink*)displayLink{
+//    currentRotate = displayLink.duration * 50;
+//    currentRotate = sin(CACurrentMediaTime()) * 50;
+    currentRotate += displayLink.duration * M_PI_2;
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+    
+    
     glClearColor(0.95f, 0.95f, 0.91f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
     
-    glViewport(0, 0, self.frame.size.width, self.frame.size.width);
     
     // Cubes
 
-//    [self setMVPFor3D:cubeShader];
+    [self setMVPFor3D:cubeShader];
+    
+//    [cubeShader useProgram];
+//
+//    GLuint colorUniformModel = [cubeShader glGetUniformLocation:"model"];
     
     glBindVertexArrayOES(cubeVAO);
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+//    for (int i = 0 ; i < 10; ++i){
+//        glm::mat4 model;
+//        model = glm::translate(model, cubePositions[i]);
+//        GLfloat angle = 20.0f * i;
+//        model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+//        glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+//    }
+    
     glBindVertexArrayOES(0);
+    
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _frameBuffer);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, sampleFramebuffer);
+    
+
+    // opengl 2.0
+//    glResolveMultisampleFramebufferAPPLE();
+//    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT};
+//    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE,2,discards);
+    
+    // opengl 3.0
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_DEPTH_ATTACHMENT});
+    
+    // Copy the read fbo(multisampled framebuffer) to the draw fbo(single-sampled framebuffer)
+    glBlitFramebuffer(0, 0, mBackingWidth, mBackingHeight, 0, 0, mBackingWidth, mBackingHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    
+    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_COLOR_ATTACHMENT0});
+    
+    //end
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }

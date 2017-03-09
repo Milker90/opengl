@@ -54,6 +54,12 @@
     
     GLuint cubeVAO, cubeVBO;
     GLuint skyboxTexture;
+    
+    GLuint sampleFramebuffer,sampleColorRenderbuffer,sampleDepthRenderbuffer;
+    
+    /* The pixel dimensions of the backbuffer */
+    GLint mBackingWidth;
+    GLint mBackingHeight;
 }
 
 -(void)switch3D;
