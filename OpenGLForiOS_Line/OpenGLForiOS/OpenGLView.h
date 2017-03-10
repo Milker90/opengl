@@ -50,9 +50,6 @@
     
     GLuint colorAttributePosition;
     GLuint colorUniformColorLoc;
-//    GLuint colorUniformProjection;
-//    GLuint colorUniformView;
-//    GLuint colorUniformModel;
     
     GLuint cubeVAO, cubeVBO;
     GLuint skyboxTexture;
