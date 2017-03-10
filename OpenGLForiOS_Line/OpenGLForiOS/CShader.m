@@ -77,6 +77,8 @@
         exit(1);
     }
     
+//    NSLog(@"%@", shaderString);
+    
     // 2
     GLuint shaderHandle = glCreateShader(shaderType);
     

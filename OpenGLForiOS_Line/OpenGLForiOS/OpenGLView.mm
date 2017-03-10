@@ -19,6 +19,26 @@
 
 #define VERTEX_STRIDE        (sizeof(GL_FLOAT) * (VERTEX_POS_SIZE + VERTEX_COLOR_SIZE))
 
+static const CC3Vector mix0 = {0.0f, -1.0f,  1.0f};
+static const CC3Vector mix1 = {0.0f, 0.0f,   1.0f};
+static const CC3Vector mix2 = {1.0f, 0.0f,   1.0f};
+static const CC3Vector mix3 = {1.0f, 1.0f,   1.0f};
+static const CC3Vector mix4 = {0.0f, -1.0f,  -1.0f};
+static const CC3Vector mix5 = {0.0f, 0.0f,   -1.0f};
+static const CC3Vector mix6 = {1.0f, 0.0f,   -1.0f};
+static const CC3Vector mix7 = {1.0f, 1.0f,   -1.0f};
+
+unsigned int nextPowerOfTwo(unsigned int x)
+{
+    x = x - 1;
+    x = x | (x >> 1);
+    x = x | (x >> 2);
+    x = x | (x >> 4);
+    x = x | (x >> 8);
+    x = x | (x >>16);
+    return x + 1;
+}
+
 @interface OpenGLView()
 
 -(void)setupLayer;
@@ -44,13 +64,15 @@
         [self setupFrameBuffer];
         
         [self compileShaders];
-        [self createMultiSampleBuffer];
+//        [self createMultiSampleBuffer];
         
 //        glEnable(GL_DEPTH_TEST);
         glClearColor(0.95f, 0.95f, 0.91f, 1.0f);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_MULTISAMPLE);
+//        glEnable(GL_MULTISAMPLE);
+        
+        
         
         [self render:nil];
     }
@@ -92,6 +114,9 @@
     colorUniformColorLoc = [colorShader glGetUniformLocation:"color"];
     
     [self setMVPFor2D:colorShader];
+    
+    aalineShader = [[CShader alloc]init];
+    [aalineShader compileVertexShader:@"AALineVertex" FragmentShader:@"AALineFragment"];
 }
 
 -(void)setMVPFor3D:(CShader *)shader{
@@ -283,6 +308,169 @@
     free(image);
 }
 
+-(void)loadLine3DTexture:(float)lineWidth{
+
+    GLubyte * image = [self createTextureLine3D:lineWidth];
+    
+    int width = nextPowerOfTwo(lineWidth);
+    width = width < 8 ? 8 : width;
+    
+    glGenTextures(1, &aaLineTexture);
+    glBindTexture(GL_TEXTURE_2D, aaLineTexture);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, width, 0, GL_ALPHA, GL_UNSIGNED_BYTE, image);
+    
+    // Set our texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+    // Set texture filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    free(image);
+}
+
+-(GLubyte *) createTextureLine3D:(int)lineWidth{
+    int width = nextPowerOfTwo(lineWidth);
+    width = width < 8 ? 8 : width;
+    GLubyte * data = (GLubyte*)malloc(width * width*sizeof(GLubyte));
+    
+    int a = sizeof(GLubyte);
+    int b = sizeof(unsigned char);
+    
+    float radius = width;                           // 半圆外完全透明
+    float pixelRadian = M_PI / radius;              // 每个像素对应的弧度
+    for (int row = 0; row < width; ++row)
+    {
+        int rowbase = row * width * 1;
+        for (int col = 0; col < width; ++col)
+        {
+            glm::vec2 dir(col + 0.5f, row + 0.5f);
+            float dis = glm::length(dir);
+            
+            unsigned char value = 0;
+            if (dis < radius)
+            {
+                float radian = (radius - dis) * pixelRadian - M_PI_2;
+                float sinR = sinf(radian);
+                //float sign = sinR > 0.0f ? 1.0f : -1.0f;
+                //float valuef = (sqrtf(fabsf(sinR)) * sign + 1.0f) * 0.5f * 255.0f;
+                float valuef = (sinR + 1.0f) * 0.5f * 255.0f;
+                value = valuef;
+            }
+            int base = rowbase + col * 1;
+            *(data + base) = value;
+        }
+    }
+    
+    return data;
+}
+
+//TextureBitmap* Texture2D::createTextureLine3D(const std::string &name, bool mipmap)
+//{
+//    assertmsg(mipmap == false, "line width is solid on screen, so mipmap is redundancy.");
+//    string strSize = name.substr(texname_line3D.size() + 1);
+//    uint width = (uint)atoi(strSize.c_str());
+//    width = Utils::nextPowerOfTwo(width);
+//    width = width < 8 ? 8 : width;
+//    TextureBitmap* bitmap = new TextureBitmap(width, width, TextureFormat_A8);
+//    TextureStyle& style = bitmap->mStyle;
+//    style.mbMipmap = false;
+//    style.mWrapX = TextureWrap_MirroredRepeat;
+//    style.mWrapY = TextureWrap_MirroredRepeat;
+//    style.mFilterMin = TextureFilterMin_Linear;
+//    style.mFilterMag = TextureFilterMag_Linear;
+//    unsigned char *data = (unsigned char*)bitmap->mpData;
+//
+//    float radius = width;                           // 半圆外完全透明
+//    float pixelRadian = M_PI / radius;              // 每个像素对应的弧度
+//    for (int row = 0; row < width; ++row)
+//    {
+//        int rowbase = row * width * 1;
+//        for (int col = 0; col < width; ++col)
+//        {
+//            Vector2f dir(col + 0.5f, row + 0.5f);
+//            float dis = glm::length(dir);
+//
+//            unsigned char value = 0;
+//            if (dis < radius)
+//            {
+//                float radian = (radius - dis) * pixelRadian - M_PI_2;
+//                float sinR = sinf(radian);
+//                //float sign = sinR > 0.0f ? 1.0f : -1.0f;
+//                //float valuef = (sqrtf(fabsf(sinR)) * sign + 1.0f) * 0.5f * 255.0f;
+//                float valuef = (sinR + 1.0f) * 0.5f * 255.0f;
+//                value = valuef;
+//            }
+//            int base = rowbase + col * 1;
+//            *(data + base) = value;
+//        }
+//    }
+//    return bitmap;
+//}
+
+-(void)drawAALineFrom:(CC3Vector) start To:(CC3Vector)to width:(float)width{
+    CC3Vector  vStart = [self screen2openGL:&start];
+    CC3Vector  vTo    = [self screen2openGL:&to];
+    
+    const int count = 8;
+    
+    CC3Vector mixVector[count] = {mix0, mix1, mix2, mix3, mix4, mix5, mix6, mix7};
+    
+    float lineWidth = width / (self.frame.size.width);
+    
+    GLfloat ver[count*9];
+    for (int i = 0 ; i != count; ++i){
+        ver[i*9 + 0] = vStart.x;
+        ver[i*9 + 1] = vStart.y;
+        ver[i*9 + 2] = vStart.z;
+        ver[i*9 + 3] = vTo.x;
+        ver[i*9 + 4] = vTo.y;
+        ver[i*9 + 5] = vTo.z;
+        ver[i*9 + 6] = mixVector[i].x;
+        ver[i*9 + 7] = mixVector[i].y;
+        ver[i*9 + 8] = mixVector[i].z;
+    }
+    GLushort index[18] = {1,5,6, 1,6,2, 0, 4,5, 0,5,1, 2,6,7, 2,7,3};
+    
+    [aalineShader useProgram];
+    
+    GLint widthXY = [aalineShader glGetUniformLocation:"lineWidthXY"];
+    float vec2WidthXY[2] = {lineWidth, lineWidth};
+    glUniform2fv(widthXY, 1, vec2WidthXY);
+    
+    GLint mvp     = [aalineShader glGetUniformLocation:"MVP"];
+    glm::mat4 matMVP = glm::mat4(1.0f);
+    glUniformMatrix4fv(mvp, 1, GL_FALSE, glm::value_ptr(matMVP));
+    
+    GLint aspect  = [aalineShader glGetUniformLocation:"aspectAndRev"];
+    float vec2Aspect[2] = {1.0f, 1.0f};
+    glUniform2fv(aspect, 1, vec2Aspect);
+    
+    GLint texUni = [aalineShader glGetUniformLocation:"texUnit"];
+    glUniform1i(texUni, 0);
+    
+    GLint color  = [aalineShader glGetUniformLocation:"color"];
+    float vec4Color[4] = {0, 0, 0, 1.0f};
+    glUniform4fv(color, 1, vec4Color);
+    
+    GLint pos0 = [aalineShader glGetAttribLocation:"position0"];
+    GLint pos1 = [aalineShader glGetAttribLocation:"position1"];
+    GLint mix  = [aalineShader glGetAttribLocation:"mixDirVer"];
+    glEnableVertexAttribArray(pos0);
+    glEnableVertexAttribArray(pos1);
+    glEnableVertexAttribArray(mix);
+    
+    glVertexAttribPointer(pos0, 3, GL_FLOAT, GL_FALSE, 9*sizeof(GLfloat), (const void *)ver);
+    glVertexAttribPointer(pos1, 3, GL_FLOAT, GL_FALSE, 9*sizeof(GLfloat), (const void *)(ver+3));
+    glVertexAttribPointer(mix , 3, GL_FLOAT, GL_FALSE, 9*sizeof(GLfloat), (const void *)(ver+6));
+    
+    glDrawElements(GL_TRIANGLES, 18,
+                   GL_UNSIGNED_SHORT, index);
+}
+
 /*
  */
 -(void)drawSegmentFrom:(CC3Vector) start To:(CC3Vector)to width:(float)width{
@@ -392,7 +580,7 @@
 }
 
 
--(void)drawSegment:(CC3Vector*) glStart
+-(void)drawSegment:(CC3Vector*)glStart
              To:(CC3Vector*)glTo
           width:(float)lineWidth
           color:(GLfloat*)color{
@@ -567,12 +755,10 @@
     [self loadBaseTexture];
     [self loadArrowTexture];
     
-    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
+//    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    
     glViewport(0, 0, self.frame.size.width, self.frame.size.width);
     
     //hahaha
@@ -583,12 +769,29 @@
     start.z = 0;
     
     to.x = 300.0f;
-    to.y = 270;
+    to.y = 90;
     to.z = 0;
     
     float width = 20.0f;
     
-    [self drawSegmentFrom:start To:to width:width];
+//    [self drawSegmentFrom:start To:to width:width];
+    
+    
+    [colorShader useProgram];
+    
+    GLfloat color[4] = {1,0,0,0.5f};
+    {
+        CC3Vector s = [self screen2openGL2:CC3VectorMake(100, 150, 0)];
+        CC3Vector e = [self screen2openGL2:CC3VectorMake(300,170, 0)];
+        float lineWidth = 40.0f / (self.frame.size.width / 2.0f);
+        [self drawSegment:&s To:&e width:lineWidth color:color];
+    }
+    
+    [self loadLine3DTexture:40.0f];
+    glBindTexture(GL_TEXTURE_2D, aaLineTexture);
+    [self drawAALineFrom:CC3VectorMake(100, 150, 0) To:CC3VectorMake(300, 170, 0) width:40.0f];
+    
+    [self drawAALineFrom:CC3VectorMake(100, 70, 0) To:CC3VectorMake(300, 90, 0) width:40.0f];
     
     [self drawSegmentFrom:CC3VectorMake(20, 30, 0) To:CC3VectorMake(350, 30, 0) width:width];
     
@@ -605,28 +808,28 @@
     lines[7] = CC3VectorMake(350, 150, 0);
     lines[8] = CC3VectorMake(150, 150, 0);
     
-    [self drawRoadLineString:lines pointCount:9 lineWidth:width borderWidth:1.0f];
+//    [self drawRoadLineString:lines pointCount:9 lineWidth:width borderWidth:1.0f];
     
     
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _frameBuffer);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, sampleFramebuffer);
-    
-    
-    // opengl 2.0
-    //    glResolveMultisampleFramebufferAPPLE();
-    //    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT};
-    //    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE,2,discards);
-    
-    // opengl 3.0
-    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_DEPTH_ATTACHMENT});
-    
-    // Copy the read fbo(multisampled framebuffer) to the draw fbo(single-sampled framebuffer)
-    glBlitFramebuffer(0, 0, mBackingWidth, mBackingHeight, 0, 0, mBackingWidth, mBackingHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-    
-    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_COLOR_ATTACHMENT0});
-    
-    //end
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+//    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, _frameBuffer);
+//    glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, sampleFramebuffer);
+//    
+//    
+//    // opengl 2.0
+//    //    glResolveMultisampleFramebufferAPPLE();
+//    //    const GLenum discards[]  = {GL_COLOR_ATTACHMENT0,GL_DEPTH_ATTACHMENT};
+//    //    glDiscardFramebufferEXT(GL_READ_FRAMEBUFFER_APPLE,2,discards);
+//    
+//    // opengl 3.0
+//    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_DEPTH_ATTACHMENT});
+//    
+//    // Copy the read fbo(multisampled framebuffer) to the draw fbo(single-sampled framebuffer)
+//    glBlitFramebuffer(0, 0, mBackingWidth, mBackingHeight, 0, 0, mBackingWidth, mBackingHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+//    
+//    glInvalidateFramebuffer(GL_READ_FRAMEBUFFER, 1, (GLenum[]){GL_COLOR_ATTACHMENT0});
+//    
+//    //end
+//    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
@@ -639,6 +842,19 @@
     
     ret.x = (coor->x - screenWidth/2.0f) / (screenWidth / 2.0f);
     ret.y = (coor->y - screenWidth/2.0f) / (screenWidth / 2.0f);
+    ret.z = 0;
+    
+    return ret;
+}
+
+-(CC3Vector)screen2openGL2:(CC3Vector)coor{
+    CC3Vector  ret ;
+    
+    float screenWidth  = self.frame.size.width;
+    float screenHeight = self.frame.size.height;
+    
+    ret.x = (coor.x - screenWidth/2.0f) / (screenWidth / 2.0f);
+    ret.y = (coor.y - screenWidth/2.0f) / (screenWidth / 2.0f);
     ret.z = 0;
     
     return ret;

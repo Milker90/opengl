@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		791676021E70FE0A001D6F0C /* LineDrawer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineDrawer.mm */; };
+		791676151E728E07001D6F0C /* AALineFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676131E728E07001D6F0C /* AALineFragment.glsl */; };
+		791676161E728E07001D6F0C /* AALineVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676141E728E07001D6F0C /* AALineVertex.glsl */; };
 		792F066F1E0CD4D7009D90BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F066E1E0CD4D7009D90BC /* main.m */; };
 		792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06711E0CD4D7009D90BC /* AppDelegate.m */; };
 		792F06751E0CD4D7009D90BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06741E0CD4D7009D90BC /* ViewController.m */; };
@@ -176,6 +178,8 @@
 		791676101E712B76001D6F0C /* mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mesh.h; sourceTree = "<group>"; };
 		791676111E712B76001D6F0C /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
 		791676121E712B76001D6F0C /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		791676131E728E07001D6F0C /* AALineFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineFragment.glsl; sourceTree = "<group>"; };
+		791676141E728E07001D6F0C /* AALineVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineVertex.glsl; sourceTree = "<group>"; };
 		792F066A1E0CD4D7009D90BC /* OpenGLForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		792F066E1E0CD4D7009D90BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		792F06701E0CD4D7009D90BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -511,6 +515,8 @@
 		791675FD1E70FD8D001D6F0C /* glsl */ = {
 			isa = PBXGroup;
 			children = (
+				791676131E728E07001D6F0C /* AALineFragment.glsl */,
+				791676141E728E07001D6F0C /* AALineVertex.glsl */,
 				79CA83DE1E6FE4B6005C8938 /* CubeFragment.glsl */,
 				79CA83DF1E6FE4B6005C8938 /* CubeVertex.glsl */,
 				79CA7EF11E693825005C8938 /* ColorFragment.glsl */,
@@ -1077,6 +1083,7 @@
 				79CA836B1E6FC9C4005C8938 /* func_trigonometric_simd.inl in Resources */,
 				79CA83881E6FC9C4005C8938 /* integer.inl in Resources */,
 				792F067D1E0CD4D7009D90BC /* LaunchScreen.storyboard in Resources */,
+				791676161E728E07001D6F0C /* AALineVertex.glsl in Resources */,
 				79CA838B1E6FC9C4005C8938 /* matrix_transform.inl in Resources */,
 				79CA83681E6FC9C4005C8938 /* func_packing.inl in Resources */,
 				79CA83C01E6FC9C4005C8938 /* raw_data.inl in Resources */,
@@ -1149,6 +1156,7 @@
 				79CA837F1E6FC9C4005C8938 /* type_vec3.inl in Resources */,
 				79CA83801E6FC9C4005C8938 /* type_vec4.inl in Resources */,
 				79CA83661E6FC9C4005C8938 /* func_matrix.inl in Resources */,
+				791676151E728E07001D6F0C /* AALineFragment.glsl in Resources */,
 				792F068C1E10BAAE009D90BC /* TextureFragment.glsl in Resources */,
 				79CA83C41E6FC9C4005C8938 /* simd_mat4.inl in Resources */,
 				79CA83BD1E6FC9C4005C8938 /* polar_coordinates.inl in Resources */,

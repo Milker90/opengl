@@ -39,12 +39,14 @@
     
     GLuint _baseTexture;
     GLuint arrowTexture;
+    GLuint aaLineTexture;
     
     int arrowWidth, arrowHeight;
     
     CShader * textureShader;
     CShader * colorShader;
     CShader * cubeShader;
+    CShader * aalineShader;
     
     GLuint colorAttributePosition;
     GLuint colorUniformColorLoc;
