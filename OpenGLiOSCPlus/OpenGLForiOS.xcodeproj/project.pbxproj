@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		791676021E70FE0A001D6F0C /* LineDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineDrawer.cpp */; };
+		791676021E70FE0A001D6F0C /* LineVertexCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineVertexCalculator.cpp */; };
 		791676151E728E07001D6F0C /* AALineFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676131E728E07001D6F0C /* AALineFragment.glsl */; };
 		791676161E728E07001D6F0C /* AALineVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676141E728E07001D6F0C /* AALineVertex.glsl */; };
 		7916761A1E7791E3001D6F0C /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676191E7791E3001D6F0C /* map.cpp */; };
 		7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7916761B1E77923C001D6F0C /* MapImp.cpp */; };
 		7916762C1E77BDB3001D6F0C /* math_type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676241E77BDB3001D6F0C /* math_type.cpp */; };
 		791676301E77EAC7001D6F0C /* ShaderGLSL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */; };
+		791676331E77F94D001D6F0C /* ColorVertexDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */; };
 		792F066F1E0CD4D7009D90BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F066E1E0CD4D7009D90BC /* main.m */; };
 		792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06711E0CD4D7009D90BC /* AppDelegate.m */; };
 		792F06751E0CD4D7009D90BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06741E0CD4D7009D90BC /* ViewController.m */; };
@@ -58,8 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		791676001E70FE0A001D6F0C /* LineDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDrawer.h; sourceTree = "<group>"; };
-		791676011E70FE0A001D6F0C /* LineDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LineDrawer.cpp; sourceTree = "<group>"; };
+		791676001E70FE0A001D6F0C /* LineVertexCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineVertexCalculator.h; sourceTree = "<group>"; };
+		791676011E70FE0A001D6F0C /* LineVertexCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LineVertexCalculator.cpp; sourceTree = "<group>"; };
 		791676131E728E07001D6F0C /* AALineFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineFragment.glsl; sourceTree = "<group>"; };
 		791676141E728E07001D6F0C /* AALineVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineVertex.glsl; sourceTree = "<group>"; };
 		791676181E7791C4001D6F0C /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = map.h; path = mapengine/map.h; sourceTree = "<group>"; };
@@ -82,6 +83,8 @@
 		7916762D1E77BE3B001D6F0C /* MapCompileDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCompileDef.h; sourceTree = "<group>"; };
 		7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderGLSL.cpp; path = mapengine/ShaderGLSL.cpp; sourceTree = "<group>"; };
 		7916762F1E77EAC7001D6F0C /* ShaderGLSL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderGLSL.h; path = mapengine/ShaderGLSL.h; sourceTree = "<group>"; };
+		791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorVertexDrawer.cpp; path = mapengine/ColorVertexDrawer.cpp; sourceTree = "<group>"; };
+		791676321E77F94D001D6F0C /* ColorVertexDrawer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorVertexDrawer.hpp; path = mapengine/ColorVertexDrawer.hpp; sourceTree = "<group>"; };
 		792F066A1E0CD4D7009D90BC /* OpenGLForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		792F066E1E0CD4D7009D90BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		792F06701E0CD4D7009D90BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -198,12 +201,14 @@
 				791676191E7791E3001D6F0C /* map.cpp */,
 				7916761C1E77923C001D6F0C /* MapImp.h */,
 				7916761B1E77923C001D6F0C /* MapImp.cpp */,
-				791676001E70FE0A001D6F0C /* LineDrawer.h */,
-				791676011E70FE0A001D6F0C /* LineDrawer.cpp */,
+				791676001E70FE0A001D6F0C /* LineVertexCalculator.h */,
+				791676011E70FE0A001D6F0C /* LineVertexCalculator.cpp */,
 				79CA7EEE1E691B8D005C8938 /* CShader.h */,
 				79CA7EEF1E691B8D005C8938 /* CShader.cpp */,
-				7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */,
 				7916762F1E77EAC7001D6F0C /* ShaderGLSL.h */,
+				7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */,
+				791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */,
+				791676321E77F94D001D6F0C /* ColorVertexDrawer.hpp */,
 			);
 			name = mapengine;
 			sourceTree = "<group>";
@@ -454,12 +459,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				791676021E70FE0A001D6F0C /* LineDrawer.cpp in Sources */,
+				791676021E70FE0A001D6F0C /* LineVertexCalculator.cpp in Sources */,
 				7916761A1E7791E3001D6F0C /* map.cpp in Sources */,
 				79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */,
 				7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */,
 				792F06751E0CD4D7009D90BC /* ViewController.m in Sources */,
 				7916762C1E77BDB3001D6F0C /* math_type.cpp in Sources */,
+				791676331E77F94D001D6F0C /* ColorVertexDrawer.cpp in Sources */,
 				791676301E77EAC7001D6F0C /* ShaderGLSL.cpp in Sources */,
 				792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */,
 				792F066F1E0CD4D7009D90BC /* main.m in Sources */,

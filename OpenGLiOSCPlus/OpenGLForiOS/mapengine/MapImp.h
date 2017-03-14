@@ -18,6 +18,7 @@
 #include <OpenGLES/ES3/glext.h>
 #include "glm.h"
 #include "CShader.h"
+#include "ColorVertexDrawer.hpp"
 
 class MapImp {
     
@@ -62,10 +63,6 @@ private:
     
     void drawRound(glm::Vector3f from ,glm::Vector3f  to ,glm::Vector3f center);
     
-    void drawArrays(GLfloat*vertices ,GLushort*indices ,int count);
-    
-    void drawArraysWithColor(glm::Vector3f*array ,GLfloat*color);
-    
     void setMVPFor2D(CShader *shader);
     
     void setMVPFor3D(CShader *shader);
@@ -88,9 +85,11 @@ private:
 private:
     const char * mArrowPath;
     CShader * textureShader;
-    CShader * colorShader;
+//    CShader * colorShader;
     CShader * cubeShader;
     CShader * aalineShader;
+    
+    ColorVertexDrawer *colorVertexDrawer;
     
     /* The pixel dimensions of the backbuffer */
     GLint mBackingWidth;

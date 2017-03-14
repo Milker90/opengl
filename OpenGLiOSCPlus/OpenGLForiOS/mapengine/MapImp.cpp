@@ -11,7 +11,7 @@
 #include <math.h>
 #include "SOIL.h"
 #include <vector>
-#include "LineDrawer.h"
+#include "LineVertexCalculator.h"
 #include "ShaderGLSL.h"
 
 using namespace glm;
@@ -46,7 +46,6 @@ unsigned int nextPowerOfTwo(unsigned int x)
 }
 
 MapImp::MapImp(int contentWidth, int contentHeight, int viewPortWidth, int viewPortHeight):
-colorShader(NULL),
 textureShader(NULL),
 aalineShader(NULL),
 cubeShader(NULL){
@@ -56,14 +55,16 @@ cubeShader(NULL){
     mBackingWidth  = viewPortWidth;
     mBackingHeight = viewPortHeight;
     
+    colorVertexDrawer = new ColorVertexDrawer();
+    
     destroyRenderAndFrameBuffer();
     
     setupRenderBuffer();
 }
 
 MapImp::~MapImp(){
-    if (colorShader){
-        delete colorShader;
+    if (colorVertexDrawer){
+        delete colorVertexDrawer;
     }
     
     if (textureShader){
@@ -154,7 +155,7 @@ void MapImp::draw(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, mBackingWidth, mBackingHeight);
     
-    colorShader->useProgram();
+    colorVertexDrawer->useProgram();
     
     glm::Vector3f start, to;
     start.x = 100;
@@ -230,10 +231,8 @@ void MapImp::drawSegment(glm::Vector3f*glStart ,
                          glm::Vector3f*glTo,
                          float lineWidth,
                          GLfloat* color){
-    
-    
-    Vector3f * array = LineDrawer::calculateVertexsForRectangle(glStart ,glTo ,lineWidth);
-    drawArraysWithColor(array ,color);
+    Vector3f * array = LineVertexCalculator::calculateVertexsForRectangle(glStart ,glTo ,lineWidth);
+    colorVertexDrawer->drawRectangleWithColor(array ,color);
     glUniform4fv(colorUniformColorLoc, 1, color);
     
     Vector3f LT, RT, LB, RB;
@@ -249,101 +248,17 @@ void MapImp::drawSegment(glm::Vector3f*glStart ,
     drawRound(RB ,LB ,center);
 }
 
-//LT 代表start
-//RT 代表end
 void MapImp::drawRound(glm::Vector3f from ,glm::Vector3f  to ,glm::Vector3f center){
-    Vector3f start = (from - center);
-    Vector3f end   = (to - center);
+    GLfloat * vertices;
+    GLushort * indices;
+    int indexCount;
+    LineVertexCalculator::verticesForRound(from, to, center, vertices, indices, indexCount);
     
-    Vector3f startNor = glm::normalize(start);
-    Vector3f endNor   = glm::normalize(end);
+    colorVertexDrawer->drawArrays(vertices ,indices ,indexCount);
     
-    float startAngle = acosf(startNor.x);
-    if (startNor.y < 0) {
-        startAngle = M_PI * 2.0f - startAngle;
-    }
-    
-    float endAngle = acosf(endNor.x);
-    if (endNor.y < 0){
-        endAngle = M_PI * 2.0f - endAngle;
-    }
-    
-    float delta = -endAngle + startAngle;
-    if (delta < 0){
-        delta += M_PI * 2.0f;
-    }
-    
-    int count = fabs(delta) / (M_PI / 18.0f) + 0.5f;
-    std::vector<Vector3f> vertexs(count+2);
-    vertexs[0] = center;
-    vertexs[1] = from;
-    
-    for (int i = 1 ;i < count ; ++i){
-        float a  = -delta/count * i;//注意方向
-        float sa = sinf(a);
-        float ca = cosf(a);
-        
-        float x = start.x * ca - start.y * sa;
-        float y = start.x * sa + start.y * ca;
-        
-        Vector3f newVec = Vector3f(x, y, 0.0f);
-        
-        Vector3f vertex = (center + newVec);
-        
-        vertexs[i+1] = vertex;
-    }
-    
-    vertexs[count+1] = to;
-    
-    GLfloat vertices[3*(count+2)];
-    for (int i = 0 ; i != count+2 ; ++i){
-        Vector3f ver = vertexs[i];
-        vertices[i*3+0] = ver.x;
-        vertices[i*3+1] = ver.y;
-        vertices[i*3+2] = ver.z;
-    }
-    
-    GLushort indices[3*count];
-    for (int i = 0 ; i != count ; ++i){
-        indices[i*3+0] = 0;
-        indices[i*3+1] = i+1;
-        indices[i*3+2] = i+2;
-    }
-    
-    drawArrays(vertices ,indices ,count*3);
+    delete[] vertices;
+    delete[] indices;
 }
-
-void MapImp::drawArraysWithColor(glm::Vector3f*array ,GLfloat*color){
-    Vector3f LTMat, RTMat, LBMat, RBMat;
-    LTMat = *array;
-    RTMat = *(array+1);
-    LBMat = *(array+2);
-    RBMat = *(array+3);
-    
-    glUniform4fv(colorUniformColorLoc, 1, color);
-    
-    GLfloat vertices[4 * (VERTEX_POS_SIZE)] = {
-        RTMat.x,RTMat.y,0,
-        RBMat.x,RBMat.y,0,
-        LBMat.x,LBMat.y,0,
-        LTMat.x,LTMat.y,0,
-    };
-    
-    GLushort indices[6] = {0, 1, 3, 1, 2, 3};
-    
-    glVertexAttribPointer(colorAttributePosition, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT) * 3, (const void *)vertices);
-    
-    glDrawElements(GL_TRIANGLES, 6,
-                   GL_UNSIGNED_SHORT, indices);
-}
-
-void MapImp::drawArrays(GLfloat*vertices ,GLushort*indices ,int count){
-    glVertexAttribPointer(colorAttributePosition, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT) * 3, (const void *)vertices);
-    
-    glDrawElements(GL_TRIANGLES, count,
-                   GL_UNSIGNED_SHORT, indices);
-}
-
 
 void MapImp::drawSegmentFrom(glm::Vector3f start ,glm::Vector3f to ,float width){
     Vector3f  vStart = screen2openGL2(start);
@@ -355,7 +270,7 @@ void MapImp::drawSegmentFrom(glm::Vector3f start ,glm::Vector3f to ,float width)
     float lineWidth = width / (mBackingWidth / 2.0f);
     
     //draw line
-    colorShader->useProgram();
+    colorVertexDrawer->useProgram();
     
     GLfloat color[4] = {0.93,0.73,0.3,1.0f};
     
@@ -390,7 +305,7 @@ void MapImp::drawArrowVertexs(Vector3f start ,Vector3f to ,int arrowCount){
     for (int i = 0 ; i < arrowCount ; ++i){
         Vector3f arrowCenter = start + (vecABNormal * ((i+1) * length / (arrowCount+1)));
         
-        Vector3f * vertexts = LineDrawer::calcluateVertexsForCenter(arrowCenter ,vecAB ,height ,width);
+        Vector3f * vertexts = LineVertexCalculator::calcluateVertexsForCenter(arrowCenter ,vecAB ,height ,width);
         
         drawArraysWithTexture(vertexts ,1);
     }
@@ -640,14 +555,14 @@ GLubyte * createTextureLine3D(int lineWidth){
 
 void MapImp::switch3D(){
     setMVPFor3D(textureShader);
-    setMVPFor3D(colorShader);
+//    setMVPFor3D(colorShader);
     
     //     render:;
 }
 
 void MapImp::switch2D(){
     setMVPFor2D(textureShader);
-    setMVPFor2D(colorShader);
+//    setMVPFor2D(colorShader);
     
     //    [self render:nil];
 }
@@ -665,11 +580,11 @@ void MapImp::compileShaders(){
     
     setMVPFor2D(textureShader);
     
-    colorShader = new CShader(ColorVertex,ColorFragment);
-    colorAttributePosition = colorShader->getAttribLocation("position");
-    colorUniformColorLoc = colorShader->getUniformLocation("color");
+//    setMVPFor2D(colorShader);
     
-    setMVPFor2D(colorShader);
+    glm::Matrix4<float> model(1.0f);
+    colorVertexDrawer->useProgram();
+    colorVertexDrawer->setMVP(model);
     
     aalineShader = new CShader(AALineVertex, AALineFragment);
 }
@@ -737,7 +652,7 @@ void MapImp::drawLineString(glm::Vector3f*points
         return;
     }
     
-    colorShader->useProgram();
+    colorVertexDrawer->useProgram();
     
     float lineWidth = width / (mBackingWidth / 2.0f);
     
@@ -750,9 +665,9 @@ void MapImp::drawLineString(glm::Vector3f*points
         
         Vector3f curLineDir = glm::normalize((vTo - vStart));
         
-        Vector3f * array = LineDrawer::calculateVertexsForRectangle(&vStart ,&vTo ,lineWidth);
+        Vector3f * array = LineVertexCalculator::calculateVertexsForRectangle(&vStart ,&vTo ,lineWidth);
         
-        drawArraysWithColor(array ,color);
+        colorVertexDrawer->drawRectangleWithColor(array ,color);
         
         Vector3f LT, RT, LB, RB;
         LT = *array;

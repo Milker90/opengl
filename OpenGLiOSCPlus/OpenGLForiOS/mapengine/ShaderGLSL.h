@@ -77,24 +77,7 @@ static const char * CubeVertex =
 "   v_normal = Position;"\
 "}";
 
-static const char * ColorFragment =
-"precision highp float;"\
-"uniform lowp vec4 color;"\
-"void main()"\
-"{"\
-"   gl_FragColor = color;"\
-"}";
 
-static const char * ColorVertex =
-"uniform mat4 u_MVPMatrix;"\
-"attribute vec3 position;"\
-"uniform mat4 model;"\
-"uniform mat4 view;"\
-"uniform mat4 projection;"\
-"void main()"\
-"{"\
-"    gl_Position = projection * view * model * vec4(position,1.0);"\
-"}";
 
 static const char * TextureFragment =
 "precision highp float;"\
