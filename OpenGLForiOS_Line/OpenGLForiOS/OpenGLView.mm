@@ -312,8 +312,18 @@ unsigned int nextPowerOfTwo(unsigned int x)
 
     GLubyte * image = [self createTextureLine3D:lineWidth];
     
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docDir = [paths objectAtIndex:0];
+    
+    NSString * saveImagePath = [docDir stringByAppendingString:@"/line3d.tga"];
+    
+    NSLog(@"%@", saveImagePath);
+    
     int width = nextPowerOfTwo(lineWidth);
     width = width < 8 ? 8 : width;
+    
+    
+//    int ret = SOIL_save_image([saveImagePath cString], SOIL_SAVE_TYPE_TGA, width, width, 4, image);
     
     glGenTextures(1, &aaLineTexture);
     glBindTexture(GL_TEXTURE_2D, aaLineTexture);
@@ -361,6 +371,9 @@ unsigned int nextPowerOfTwo(unsigned int x)
                 value = valuef;
             }
             int base = rowbase + col * 1;
+//            *(data + base*4+0) = 0;
+//            *(data + base*4+1) = 0;
+//            *(data + base*4+2) = 0;
             *(data + base) = value;
         }
     }
