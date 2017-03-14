@@ -6,19 +6,25 @@
 //  Copyright © 2017年 lihuafeng. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "CC3GLMatrix.h"
-#import "CC3Kazmath.h"
+#ifndef LINE_DRAWER_HEADER_H
+#define LINE_DRAWER_HEADER_H
 
-@interface LineDrawer : NSObject
 
-+(CC3Vector*)calcluateVertexsForCenter:(CC3Vector)center
-                             direction:(CC3Vector)dir
-                                height:(float)height
-                                 width:(float)width;
+#include "glm.h"
 
-+(CC3Vector*)calculateVertexsForRectangleFrom:(CC3Vector *)glStart
-                                           To:(CC3Vector *)glTo
-                                        width:(float)lineWidth;
+class LineDrawer {
+    
+public:
+    static Vector3f* calcluateVertexsForCenter(Vector3f center
+                                        ,Vector3f dir
+                                        ,float height
+                                        ,float width);
+    
+    static Vector3f* calculateVertexsForRectangleFrom(Vector3f *glStart
+                                               ,Vector3f * glTo
+                                               ,float lineWidth);
+    
+};
 
-@end
+
+#endif

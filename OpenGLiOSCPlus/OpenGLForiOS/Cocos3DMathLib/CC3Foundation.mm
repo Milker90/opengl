@@ -29,7 +29,7 @@
  * See header file CC3Foundation.h for full API documentation.
  */
 
-#import "CC3Foundation.h"
+#include "CC3Foundation.h"
 
 #pragma mark -
 #pragma mark 3D cartesian vector structure and functions

@@ -15,42 +15,16 @@
 #include <OpenGLES/ES3/glext.h>
 #import "CC3GLMatrix.h"
 #import "CC3Kazmath.h"
-#import "CShader.h"
+//#import "CShader.h"
 
 @interface OpenGLView : UIView {
     CAEAGLLayer * _eaglLayer;
     EAGLContext * _context;
     
-    
-    GLuint attribPosition;
-    GLuint attribTexCoord;
-    GLuint uniformTexture;
-    GLuint uniformUseMixColor;
-    
-    GLuint _projectionUniform;
-    GLuint _modelViewUniform;
-    
     float _currentRotation;
     
     
-    GLuint vaoId;
-    
-    GLuint _baseTexture;
-    GLuint arrowTexture;
-    GLuint aaLineTexture;
-    
-    int arrowWidth, arrowHeight;
-    
-    CShader * textureShader;
-    CShader * colorShader;
-    CShader * cubeShader;
-    CShader * aalineShader;
-    
-    GLuint colorAttributePosition;
-    GLuint colorUniformColorLoc;
-    
-    GLuint cubeVAO, cubeVBO;
-    GLuint skyboxTexture;
+   
     
     
     void * mpMap;

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		791676021E70FE0A001D6F0C /* LineDrawer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineDrawer.mm */; };
+		791676021E70FE0A001D6F0C /* LineDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676011E70FE0A001D6F0C /* LineDrawer.cpp */; };
 		791676151E728E07001D6F0C /* AALineFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676131E728E07001D6F0C /* AALineFragment.glsl */; };
 		791676161E728E07001D6F0C /* AALineVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 791676141E728E07001D6F0C /* AALineVertex.glsl */; };
 		7916761A1E7791E3001D6F0C /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676191E7791E3001D6F0C /* map.cpp */; };
@@ -26,7 +26,7 @@
 		79309ED81E10FB320095BA8C /* CC3GLMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED01E10FB320095BA8C /* CC3GLMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED11E10FB320095BA8C /* CC3Kazmath.mm */; };
 		79309EDA1E10FB320095BA8C /* CC3Math.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79309ED51E10FB320095BA8C /* CC3Math.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		79CA7EF01E691B8D005C8938 /* CShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CA7EEF1E691B8D005C8938 /* CShader.m */; };
+		79CA7EF01E691B8D005C8938 /* CShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79CA7EEF1E691B8D005C8938 /* CShader.cpp */; };
 		79CA7EF31E693825005C8938 /* ColorFragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 79CA7EF11E693825005C8938 /* ColorFragment.glsl */; };
 		79CA7EF41E693825005C8938 /* ColorVertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 79CA7EF21E693825005C8938 /* ColorVertex.glsl */; };
 		79CA83D81E6FE254005C8938 /* back.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 79CA83D21E6FE254005C8938 /* back.jpeg */; };
@@ -58,7 +58,7 @@
 
 /* Begin PBXFileReference section */
 		791676001E70FE0A001D6F0C /* LineDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDrawer.h; sourceTree = "<group>"; };
-		791676011E70FE0A001D6F0C /* LineDrawer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LineDrawer.mm; sourceTree = "<group>"; };
+		791676011E70FE0A001D6F0C /* LineDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LineDrawer.cpp; sourceTree = "<group>"; };
 		791676131E728E07001D6F0C /* AALineFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineFragment.glsl; sourceTree = "<group>"; };
 		791676141E728E07001D6F0C /* AALineVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AALineVertex.glsl; sourceTree = "<group>"; };
 		791676181E7791C4001D6F0C /* map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = map.h; path = mapengine/map.h; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 		79309ED61E10FB320095BA8C /* ccTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccTypes.h; sourceTree = "<group>"; };
 		79309EDB1E10FBB90095BA8C /* openGLPre.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = openGLPre.pch; sourceTree = "<group>"; };
 		79CA7EEE1E691B8D005C8938 /* CShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CShader.h; sourceTree = "<group>"; };
-		79CA7EEF1E691B8D005C8938 /* CShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CShader.m; sourceTree = "<group>"; };
+		79CA7EEF1E691B8D005C8938 /* CShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CShader.cpp; sourceTree = "<group>"; };
 		79CA7EF11E693825005C8938 /* ColorFragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorFragment.glsl; sourceTree = "<group>"; };
 		79CA7EF21E693825005C8938 /* ColorVertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ColorVertex.glsl; sourceTree = "<group>"; };
 		79CA83D21E6FE254005C8938 /* back.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = back.jpeg; sourceTree = "<group>"; };
@@ -183,8 +183,6 @@
 			children = (
 				792F06841E0CD559009D90BC /* OpenGLView.h */,
 				792F06851E0CD559009D90BC /* OpenGLView.mm */,
-				79CA7EEE1E691B8D005C8938 /* CShader.h */,
-				79CA7EEF1E691B8D005C8938 /* CShader.m */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -198,7 +196,9 @@
 				7916761C1E77923C001D6F0C /* MapImp.h */,
 				7916761B1E77923C001D6F0C /* MapImp.cpp */,
 				791676001E70FE0A001D6F0C /* LineDrawer.h */,
-				791676011E70FE0A001D6F0C /* LineDrawer.mm */,
+				791676011E70FE0A001D6F0C /* LineDrawer.cpp */,
+				79CA7EEE1E691B8D005C8938 /* CShader.h */,
+				79CA7EEF1E691B8D005C8938 /* CShader.cpp */,
 			);
 			name = mapengine;
 			sourceTree = "<group>";
@@ -449,7 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				791676021E70FE0A001D6F0C /* LineDrawer.mm in Sources */,
+				791676021E70FE0A001D6F0C /* LineDrawer.cpp in Sources */,
 				7916761A1E7791E3001D6F0C /* map.cpp in Sources */,
 				79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */,
 				7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */,
@@ -458,7 +458,7 @@
 				792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */,
 				792F066F1E0CD4D7009D90BC /* main.m in Sources */,
 				79309ED71E10FB320095BA8C /* CC3Foundation.mm in Sources */,
-				79CA7EF01E691B8D005C8938 /* CShader.m in Sources */,
+				79CA7EF01E691B8D005C8938 /* CShader.cpp in Sources */,
 				792F06861E0CD559009D90BC /* OpenGLView.mm in Sources */,
 				79309ED81E10FB320095BA8C /* CC3GLMatrix.mm in Sources */,
 				79309EDA1E10FB320095BA8C /* CC3Math.mm in Sources */,
@@ -596,6 +596,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 37R4MXRGR5;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/OpenGLForiOS/openGLPre.pch";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OpenGLForiOS";
 				INFOPLIST_FILE = OpenGLForiOS/Info.plist;
@@ -614,6 +615,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 37R4MXRGR5;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/OpenGLForiOS/openGLPre.pch";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/OpenGLForiOS";
 				INFOPLIST_FILE = OpenGLForiOS/Info.plist;

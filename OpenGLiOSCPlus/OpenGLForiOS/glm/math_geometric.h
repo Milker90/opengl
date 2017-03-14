@@ -222,6 +222,13 @@ namespace glm {
         return p / len;
     }
     
+//    template <typename T>
+//    inline Vector3<T> scale(const Vector3<T> & I, const T & scale)
+//    {
+//        Vector3<T> r;
+//        
+//    }
+    
     template <typename T>
     inline T reflect(const T& I, const T& N)
     {

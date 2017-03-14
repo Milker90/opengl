@@ -18,9 +18,11 @@ extern "C" {
     
     
 
-void* wfCreateMap(void * context, int width, int height);
+    void* wfCreateMap(void * context, int width, int height);
+    
+    void  wfMapDraw(void *pMap);
 
-void wfDestroyMap(void *pMap);
+    void  wfDestroyMap(void *pMap);
     
     
     

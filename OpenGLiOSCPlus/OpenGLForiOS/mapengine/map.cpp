@@ -11,11 +11,18 @@
 #include "MapImp.h"
 
 void* wfCreateMap(void * context, int width, int height){
-    MapImp * map = new MapImp(width, height);
+    MapImp * map = new MapImp(width, height, width, width);
     return map;
 }
 
 void wfDestroyMap(void *pMap){
     MapImp *map = (MapImp*)pMap;
     delete  map;
+}
+
+void  wfMapDraw(void *pMap){
+    MapImp *map = (MapImp*)pMap;
+    if (map){
+        map->draw();
+    }
 }
