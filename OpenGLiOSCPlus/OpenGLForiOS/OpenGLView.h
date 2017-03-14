@@ -20,8 +20,7 @@
 @interface OpenGLView : UIView {
     CAEAGLLayer * _eaglLayer;
     EAGLContext * _context;
-    GLuint _colorRenderBuffer;
-    GLuint _frameBuffer;
+    
     
     GLuint attribPosition;
     GLuint attribTexCoord;
@@ -33,7 +32,6 @@
     
     float _currentRotation;
     
-    GLuint _depthRenderBuffer;
     
     GLuint vaoId;
     
@@ -54,11 +52,8 @@
     GLuint cubeVAO, cubeVBO;
     GLuint skyboxTexture;
     
-    GLuint sampleFramebuffer,sampleColorRenderbuffer,sampleDepthRenderbuffer;
     
-    /* The pixel dimensions of the backbuffer */
-    GLint mBackingWidth;
-    GLint mBackingHeight;
+    void * mpMap;
 }
 
 -(void)switch3D;

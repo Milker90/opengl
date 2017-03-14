@@ -8,11 +8,12 @@
 
 #import "OpenGLView.h"
 #include "SOIL.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "glm.h"
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
 #import "LineDrawer.h"
-#include "learnopengl/camera.h"
+//#include "learnopengl/camera.h"
+#include "map.h"
 
 #define VERTEX_POS_SIZE      3
 #define VERTEX_COLOR_SIZE    2
@@ -58,10 +59,12 @@ unsigned int nextPowerOfTwo(unsigned int x)
         [self setupLayer];
         [self setupContext];
         
-        [self destroyRenderAndFrameBuffer];
-        [self setupDepthBuffer];
+        
+        mpMap = wfCreateMap((__bridge void *)_context, self.frame.size.width, self.frame.size.height);
+        
+        
         [self setupRenderBuffer];
-        [self setupFrameBuffer];
+    
         
         [self compileShaders];
 //        [self createMultiSampleBuffer];
@@ -126,20 +129,20 @@ unsigned int nextPowerOfTwo(unsigned int x)
     GLuint colorUniformModel = [shader glGetUniformLocation:"model"];
     GLuint colorUniformView = [shader glGetUniformLocation:"view"];
     
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 proj;
+    glm::Matrix4<float> model;
+    glm::Matrix4<float> view;
+    glm::Matrix4<float> proj;
     
 //    model = glm::mat4(1.0f);
 //    view = glm::mat4(glm::mat3(camera.GetViewMatrix()));	// Remove any translation
     
-    model = glm::rotate(model, - float(M_PI_4), glm::vec3(1.0f, 0.0f, 0.0f));
-    view  = glm::translate(view, glm::vec3(0.0f, 0.0, -2.5f));
+    model = glm::rotate(model, - float(M_PI_4), glm::Vector3<float>(1.0f, 0.0f, 0.0f));
+    view  = glm::translate(view, glm::Vector3<float>(0.0f, 0.0, -2.5f));
     proj  = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
     
-    glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(colorUniformView, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(colorUniformProjection, 1, GL_FALSE, glm::value_ptr(proj));
+    glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, model.ptr());
+    glUniformMatrix4fv(colorUniformView, 1, GL_FALSE, view.ptr());
+    glUniformMatrix4fv(colorUniformProjection, 1, GL_FALSE, proj.ptr());
 }
 
 
@@ -150,13 +153,13 @@ unsigned int nextPowerOfTwo(unsigned int x)
     GLuint colorUniformModel = [shader glGetUniformLocation:"model"];
     GLuint colorUniformView = [shader glGetUniformLocation:"view"];
     
-    glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 projection = glm::mat4(1.0f);
+    glm::Matrix4<float> model(1.0f);
+    glm::Matrix4<float> view(1.0f);
+    glm::Matrix4<float> proj(1.0f);
     
-    glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(colorUniformView, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(colorUniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(colorUniformModel, 1, GL_FALSE, model.ptr());
+    glUniformMatrix4fv(colorUniformView, 1, GL_FALSE, view.ptr());
+    glUniformMatrix4fv(colorUniformProjection, 1, GL_FALSE, proj.ptr());
 }
 
 -(void)setupLayer{
@@ -185,54 +188,15 @@ unsigned int nextPowerOfTwo(unsigned int x)
     }
 }
 
--(void)createMultiSampleBuffer{
-    mBackingWidth = self.frame.size.width;
-    mBackingHeight = self.frame.size.height;
-    
-    glGenFramebuffers(1, &sampleFramebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, sampleFramebuffer);
-    
-    glGenRenderbuffers(1, &sampleColorRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, sampleColorRenderbuffer);
-    
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, mBackingWidth, mBackingHeight);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, sampleColorRenderbuffer);
-    
-    glGenRenderbuffers(1, &sampleDepthRenderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, sampleDepthRenderbuffer);
-    
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT16, mBackingWidth, mBackingHeight);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, sampleDepthRenderbuffer);
-    
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-}
-
 -(void)setupRenderBuffer{
-    glGenRenderbuffers(1, &_colorRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+    
+    
+    
     [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer];
+
 }
 
--(void)setupFrameBuffer{
-    glGenFramebuffers(1, &_frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-}
 
-- (void)setupDepthBuffer {
-    glGenRenderbuffers(1, &_depthRenderBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, self.frame.size.width, self.frame.size.height);
-}
-
--(void)destroyRenderAndFrameBuffer{
-    glDeleteFramebuffers(1, &_frameBuffer);
-    _frameBuffer = 0;
-    glDeleteRenderbuffers(1, &_colorRenderBuffer);
-    _colorRenderBuffer = 0;
-}
 
 -(void)loadBaseTexture{
     GLubyte pixels[4*4] = {
@@ -357,7 +321,7 @@ unsigned int nextPowerOfTwo(unsigned int x)
         int rowbase = row * width * 1;
         for (int col = 0; col < width; ++col)
         {
-            glm::vec2 dir(col + 0.5f, row + 0.5f);
+            glm::Vector2f dir(col + 0.5f, row + 0.5f);
             float dis = glm::length(dir);
             
             unsigned char value = 0;
@@ -380,49 +344,6 @@ unsigned int nextPowerOfTwo(unsigned int x)
     
     return data;
 }
-
-//TextureBitmap* Texture2D::createTextureLine3D(const std::string &name, bool mipmap)
-//{
-//    assertmsg(mipmap == false, "line width is solid on screen, so mipmap is redundancy.");
-//    string strSize = name.substr(texname_line3D.size() + 1);
-//    uint width = (uint)atoi(strSize.c_str());
-//    width = Utils::nextPowerOfTwo(width);
-//    width = width < 8 ? 8 : width;
-//    TextureBitmap* bitmap = new TextureBitmap(width, width, TextureFormat_A8);
-//    TextureStyle& style = bitmap->mStyle;
-//    style.mbMipmap = false;
-//    style.mWrapX = TextureWrap_MirroredRepeat;
-//    style.mWrapY = TextureWrap_MirroredRepeat;
-//    style.mFilterMin = TextureFilterMin_Linear;
-//    style.mFilterMag = TextureFilterMag_Linear;
-//    unsigned char *data = (unsigned char*)bitmap->mpData;
-//
-//    float radius = width;                           // 半圆外完全透明
-//    float pixelRadian = M_PI / radius;              // 每个像素对应的弧度
-//    for (int row = 0; row < width; ++row)
-//    {
-//        int rowbase = row * width * 1;
-//        for (int col = 0; col < width; ++col)
-//        {
-//            Vector2f dir(col + 0.5f, row + 0.5f);
-//            float dis = glm::length(dir);
-//
-//            unsigned char value = 0;
-//            if (dis < radius)
-//            {
-//                float radian = (radius - dis) * pixelRadian - M_PI_2;
-//                float sinR = sinf(radian);
-//                //float sign = sinR > 0.0f ? 1.0f : -1.0f;
-//                //float valuef = (sqrtf(fabsf(sinR)) * sign + 1.0f) * 0.5f * 255.0f;
-//                float valuef = (sinR + 1.0f) * 0.5f * 255.0f;
-//                value = valuef;
-//            }
-//            int base = rowbase + col * 1;
-//            *(data + base) = value;
-//        }
-//    }
-//    return bitmap;
-//}
 
 -(void)drawAALineFrom:(CC3Vector) start To:(CC3Vector)to width:(float)width{
     CC3Vector  vStart = [self screen2openGL:&start];
@@ -455,8 +376,8 @@ unsigned int nextPowerOfTwo(unsigned int x)
     glUniform2fv(widthXY, 1, vec2WidthXY);
     
     GLint mvp     = [aalineShader glGetUniformLocation:"MVP"];
-    glm::mat4 matMVP = glm::mat4(1.0f);
-    glUniformMatrix4fv(mvp, 1, GL_FALSE, glm::value_ptr(matMVP));
+    glm::Matrix4f matMVP = glm::Matrix4f(1.0f);
+    glUniformMatrix4fv(mvp, 1, GL_FALSE, matMVP.ptr());
     
     GLint aspect  = [aalineShader glGetUniformLocation:"aspectAndRev"];
     float vec2Aspect[2] = {1.0f, 1.0f};
