@@ -13,6 +13,7 @@
 		7916761A1E7791E3001D6F0C /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676191E7791E3001D6F0C /* map.cpp */; };
 		7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7916761B1E77923C001D6F0C /* MapImp.cpp */; };
 		7916762C1E77BDB3001D6F0C /* math_type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676241E77BDB3001D6F0C /* math_type.cpp */; };
+		791676301E77EAC7001D6F0C /* ShaderGLSL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */; };
 		792F066F1E0CD4D7009D90BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F066E1E0CD4D7009D90BC /* main.m */; };
 		792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06711E0CD4D7009D90BC /* AppDelegate.m */; };
 		792F06751E0CD4D7009D90BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06741E0CD4D7009D90BC /* ViewController.m */; };
@@ -79,6 +80,8 @@
 		7916762A1E77BDB3001D6F0C /* Vector3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector3.h; sourceTree = "<group>"; };
 		7916762B1E77BDB3001D6F0C /* Vector4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector4.h; sourceTree = "<group>"; };
 		7916762D1E77BE3B001D6F0C /* MapCompileDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCompileDef.h; sourceTree = "<group>"; };
+		7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderGLSL.cpp; path = mapengine/ShaderGLSL.cpp; sourceTree = "<group>"; };
+		7916762F1E77EAC7001D6F0C /* ShaderGLSL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderGLSL.h; path = mapengine/ShaderGLSL.h; sourceTree = "<group>"; };
 		792F066A1E0CD4D7009D90BC /* OpenGLForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		792F066E1E0CD4D7009D90BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		792F06701E0CD4D7009D90BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -199,6 +202,8 @@
 				791676011E70FE0A001D6F0C /* LineDrawer.cpp */,
 				79CA7EEE1E691B8D005C8938 /* CShader.h */,
 				79CA7EEF1E691B8D005C8938 /* CShader.cpp */,
+				7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */,
+				7916762F1E77EAC7001D6F0C /* ShaderGLSL.h */,
 			);
 			name = mapengine;
 			sourceTree = "<group>";
@@ -455,6 +460,7 @@
 				7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */,
 				792F06751E0CD4D7009D90BC /* ViewController.m in Sources */,
 				7916762C1E77BDB3001D6F0C /* math_type.cpp in Sources */,
+				791676301E77EAC7001D6F0C /* ShaderGLSL.cpp in Sources */,
 				792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */,
 				792F066F1E0CD4D7009D90BC /* main.m in Sources */,
 				79309ED71E10FB320095BA8C /* CC3Foundation.mm in Sources */,

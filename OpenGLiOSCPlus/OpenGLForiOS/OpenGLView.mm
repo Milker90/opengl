@@ -7,16 +7,8 @@
 //
 
 #import "OpenGLView.h"
-#include "SOIL.h"
-#include "glm.h"
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
-#import "LineDrawer.h"
-//#include "learnopengl/camera.h"
 #include "map.h"
-
-
-
+#include "MapImp.h"
 
 @interface OpenGLView()
 
@@ -37,19 +29,22 @@
         [self setupLayer];
         [self setupContext];
         
-        
         mpMap = wfCreateMap((__bridge void *)_context, self.frame.size.width, self.frame.size.height);
         
+            NSString * imagePath = [[NSBundle mainBundle] pathForResource:@"vector_road_arrow" ofType:@"png"];
+        
+        wfMapSetArrowTexturePath(mpMap, [imagePath cString]);
         
         [self setupRenderBuffer];
-//        [self createMultiSampleBuffer];
-        
-
         
         [self render:nil];
     }
     
     return self;
+}
+
+-(void)dealloc{
+    wfDestroyMap(mpMap);
 }
 
 

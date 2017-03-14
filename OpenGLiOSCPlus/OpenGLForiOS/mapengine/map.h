@@ -21,16 +21,14 @@ extern "C" {
     void* wfCreateMap(void * context, int width, int height);
     
     void  wfMapDraw(void *pMap);
+    
+    void  wfMapSetArrowTexturePath(void *pMap, const char *path);
 
     void  wfDestroyMap(void *pMap);
     
     
     
 
-    
-    
-    
-    
     
     
     

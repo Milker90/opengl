@@ -23,8 +23,11 @@ class MapImp {
     
 public:
     MapImp(int contentWidth, int contentHeight, int viewPortWidth, int viewPortHeight);
+    ~MapImp();
     
     void draw();
+    
+    void setArrowTexturePath(const char * arrowPath) {mArrowPath = arrowPath;};
     
 private:
     
@@ -43,13 +46,13 @@ private:
     glm::Vector3f screen2openGL2(glm::Vector3f coor);
     
     void drawSegment(glm::Vector3f*glStart ,
-                             glm::Vector3f*glTo,
-                             float lineWidth,
-                             GLfloat* color);
+                     glm::Vector3f*glTo,
+                     float lineWidth,
+                     GLfloat* color);
     
     void drawAALineFrom(glm::Vector3f start ,
-                                glm::Vector3f to ,
-                                float width);
+                        glm::Vector3f to ,
+                        float width);
     
     void drawSegmentFrom(glm::Vector3f start ,glm::Vector3f to ,float width);
     
@@ -73,16 +76,17 @@ private:
     void switch3D();
     
     void drawLineString(glm::Vector3f*points
-                                ,int pointCount
-                                ,float width
-                                ,GLfloat* color);
+                        ,int pointCount
+                        ,float width
+                        ,GLfloat* color);
     
     void drawRoadLineString(glm::Vector3f *points
-                                    ,int pointCount
-                                    ,float lineWidth
+                            ,int pointCount
+                            ,float lineWidth
                             ,float borderWidth);
     
 private:
+    const char * mArrowPath;
     CShader * textureShader;
     CShader * colorShader;
     CShader * cubeShader;
@@ -115,23 +119,13 @@ private:
     GLuint _projectionUniform;
     GLuint _modelViewUniform;
     
-    
-    
-    
     GLuint vaoId;
-    
-    
-    
-    
-    
-    
     
     GLuint colorAttributePosition;
     GLuint colorUniformColorLoc;
     
     GLuint cubeVAO, cubeVBO;
     GLuint skyboxTexture;
-
 };
 
 #endif /* MapImp_hpp */

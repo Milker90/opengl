@@ -26,3 +26,10 @@ void  wfMapDraw(void *pMap){
         map->draw();
     }
 }
+
+void  wfMapSetArrowTexturePath(void *pMap, const char *path){
+    MapImp *map = (MapImp*)pMap;
+    if (map){
+        map->setArrowTexturePath(path);
+    }
+}

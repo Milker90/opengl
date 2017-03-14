@@ -20,7 +20,7 @@ public:
                                         ,float height
                                         ,float width);
     
-    static Vector3f* calculateVertexsForRectangleFrom(Vector3f *glStart
+    static Vector3f* calculateVertexsForRectangle(Vector3f *glStart
                                                ,Vector3f * glTo
                                                ,float lineWidth);
     

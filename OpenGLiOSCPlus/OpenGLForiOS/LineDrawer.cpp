@@ -19,10 +19,10 @@ Vector3f* LineDrawer::calcluateVertexsForCenter(Vector3f center
     Vector3f start = (center - (dirNormal * height/2.0f));
     Vector3f to    = (center + (dirNormal * height/2.0f));
     
-    return calculateVertexsForRectangleFrom(&start ,&to ,width);
+    return calculateVertexsForRectangle(&start ,&to ,width);
 }
 
-Vector3f* LineDrawer::calculateVertexsForRectangleFrom(Vector3f *glStart
+Vector3f* LineDrawer::calculateVertexsForRectangle(Vector3f *glStart
                                            ,Vector3f * glTo
                                            ,float lineWidth){
     Vector3f center = Vector3f((glStart->x + glTo->x)/2.0f, (glStart->y + glTo->y)/2.0f, 0.0f);

@@ -15,17 +15,12 @@
 #include <OpenGLES/ES3/glext.h>
 #import "CC3GLMatrix.h"
 #import "CC3Kazmath.h"
-//#import "CShader.h"
 
 @interface OpenGLView : UIView {
     CAEAGLLayer * _eaglLayer;
     EAGLContext * _context;
     
     float _currentRotation;
-    
-    
-   
-    
     
     void * mpMap;
 }
