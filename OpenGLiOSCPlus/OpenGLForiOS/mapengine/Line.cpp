@@ -20,17 +20,15 @@ Line::~Line(){
     
 }
 
-void Line::draw(glm::Vector3f*points
-                            ,int pointCount
-                            ,float lineWidth
-                            ,GLfloat* color){
+void Line::draw(glm::Vector3f*points,
+                int pointCount,
+                float lineWidth,
+                GLfloat* color){
     if (pointCount < 2){
         return;
     }
     
     mColorDrawer->useProgram();
-    
-//    float lineWidth = width / (mBackingWidth / 2.0f);
     
     Vector3f preLT, preRT, preLineDir;
     
@@ -93,12 +91,11 @@ void Line::drawRound(glm::Vector3f from ,glm::Vector3f  to ,glm::Vector3f center
 }
 
 void Line::drawSegment(glm::Vector3f*glStart ,
-                         glm::Vector3f*glTo,
-                         float lineWidth,
-                         GLfloat* color){
+                       glm::Vector3f*glTo,
+                       float lineWidth,
+                       GLfloat* color){
     Vector3f * array = LineVertexCalculator::calculateVertexsForRectangle(glStart ,glTo ,lineWidth);
     mColorDrawer->drawRectangleWithColor(array ,color);
-//    glUniform4fv(colorUniformColorLoc, 1, color);
     
     Vector3f LT, RT, LB, RB;
     LT = *array;

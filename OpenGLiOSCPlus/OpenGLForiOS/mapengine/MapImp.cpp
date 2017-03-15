@@ -619,7 +619,7 @@ void MapImp::drawRoadLineString(glm::Vector3f *points
     
     line.draw(points ,pointCount ,lineWidth ,borderColor);
     
-    GLfloat fillColor[4] = {0.97, 0.87, 0.56,1.0f};
+    GLfloat fillColor[4] = {0.97, 0.87, 0.56, 1.0f};
     
     line.draw(points ,pointCount ,lineWidth-borderWidth*2.0f ,fillColor);
 }
