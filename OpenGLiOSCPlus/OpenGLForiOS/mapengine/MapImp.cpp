@@ -13,6 +13,7 @@
 #include <vector>
 #include "LineVertexCalculator.h"
 #include "ShaderGLSL.h"
+#include "Line.hpp"
 
 using namespace glm;
 
@@ -170,14 +171,19 @@ void MapImp::draw(){
     
     drawSegmentFrom(start ,to ,width);
     
+    
     GLfloat color[4] = {1,0,0,0.5f};
+    
+    Line line(this, colorVertexDrawer);
     
     {
         Vector3f s = screen2openGL2(Vector3f(100, 150, 0));
         Vector3f e = screen2openGL2(Vector3f(300,170, 0));
         float lineWidth = 40.0f / (mBackingWidth / 2.0f);
-        drawSegment(&s ,&e ,lineWidth ,color);
+        line.drawSegment(&s ,&e ,lineWidth ,color);
     }
+    
+    
     
     loadLine3DTexture(40.0f);
     glBindTexture(GL_TEXTURE_2D, aaLineTexture);
@@ -190,6 +196,7 @@ void MapImp::draw(){
     
     drawSegmentFrom(Vector3f(30, 70, 0) ,Vector3f(30, 300, 0) ,width);
     
+    
     Vector3f lines[9];
     lines[0] = Vector3f(100, 150, 0);
     lines[1] = Vector3f(100, 250, 0);
@@ -201,7 +208,7 @@ void MapImp::draw(){
     lines[7] = Vector3f(350, 150, 0);
     lines[8] = Vector3f(150, 150, 0);
     
-    drawRoadLineString(lines ,9 ,width ,1.0f);
+    drawRoadLineString(lines ,9 ,width/(mBackingWidth / 2.0f) , 1.0f/(mBackingWidth / 2.0f));
     
     
 #ifdef USE_MULTI_SAMPLE
@@ -227,38 +234,7 @@ void MapImp::draw(){
 #endif
 }
 
-void MapImp::drawSegment(glm::Vector3f*glStart ,
-                         glm::Vector3f*glTo,
-                         float lineWidth,
-                         GLfloat* color){
-    Vector3f * array = LineVertexCalculator::calculateVertexsForRectangle(glStart ,glTo ,lineWidth);
-    colorVertexDrawer->drawRectangleWithColor(array ,color);
-    glUniform4fv(colorUniformColorLoc, 1, color);
-    
-    Vector3f LT, RT, LB, RB;
-    LT = *array;
-    RT = *(array+1);
-    LB = *(array+2);
-    RB = *(array+3);
-    
-    Vector3f center= Vector3f((LT.x + RT.x)/2.0f, (LT.y + RT.y)/2.0f, 0);
-    drawRound(LT ,RT ,center);
-    
-    center = Vector3f((LB.x + RB.x)/2.0f, (LB.y + RB.y)/2.0f, 0);
-    drawRound(RB ,LB ,center);
-}
 
-void MapImp::drawRound(glm::Vector3f from ,glm::Vector3f  to ,glm::Vector3f center){
-    GLfloat * vertices;
-    GLushort * indices;
-    int indexCount;
-    LineVertexCalculator::verticesForRound(from, to, center, vertices, indices, indexCount);
-    
-    colorVertexDrawer->drawArrays(vertices ,indices ,indexCount);
-    
-    delete[] vertices;
-    delete[] indices;
-}
 
 void MapImp::drawSegmentFrom(glm::Vector3f start ,glm::Vector3f to ,float width){
     Vector3f  vStart = screen2openGL2(start);
@@ -274,13 +250,15 @@ void MapImp::drawSegmentFrom(glm::Vector3f start ,glm::Vector3f to ,float width)
     
     GLfloat color[4] = {0.93,0.73,0.3,1.0f};
     
+    Line line(this, colorVertexDrawer);
+    
     //draw background
-    drawSegment(glStart ,glTo ,lineWidth ,color);
+    line.drawSegment(glStart ,glTo ,lineWidth ,color);
     
     //draw fill
     float borderWidth = 1.0f / (mBackingWidth / 2.0f);
     GLfloat acolor[4] = {0.97, 0.87, 0.56,1.0f};
-    drawSegment(glStart ,glTo ,lineWidth-borderWidth*2 ,acolor);
+    line.drawSegment(glStart ,glTo ,lineWidth-borderWidth*2 ,acolor);
     
     //draw arrow
     glBindTexture(GL_TEXTURE_2D, arrowTexture);
@@ -637,73 +615,14 @@ void MapImp::drawRoadLineString(glm::Vector3f *points
     
     GLfloat borderColor[4] = {0.93,0.73,0.3,1.0f};
     
-    drawLineString(points ,pointCount ,lineWidth ,borderColor);
+    Line line(this, colorVertexDrawer);
+    
+    line.draw(points ,pointCount ,lineWidth ,borderColor);
     
     GLfloat fillColor[4] = {0.97, 0.87, 0.56,1.0f};
     
-    drawLineString(points ,pointCount ,lineWidth-borderWidth*2.0f ,fillColor);
+    line.draw(points ,pointCount ,lineWidth-borderWidth*2.0f ,fillColor);
 }
-
-void MapImp::drawLineString(glm::Vector3f*points
-                            ,int pointCount
-                            ,float width
-                            ,GLfloat* color){
-    if (pointCount < 2){
-        return;
-    }
-    
-    colorVertexDrawer->useProgram();
-    
-    float lineWidth = width / (mBackingWidth / 2.0f);
-    
-    Vector3f preLT, preRT, preLineDir;
-    
-    for (int i = 1 ;i < pointCount; ++i){
-        
-        Vector3f vStart  = screen2openGL2(points[i-1]);
-        Vector3f  vTo    = screen2openGL2(points[i]);
-        
-        Vector3f curLineDir = glm::normalize((vTo - vStart));
-        
-        Vector3f * array = LineVertexCalculator::calculateVertexsForRectangle(&vStart ,&vTo ,lineWidth);
-        
-        colorVertexDrawer->drawRectangleWithColor(array ,color);
-        
-        Vector3f LT, RT, LB, RB;
-        LT = *array;
-        RT = *(array+1);
-        LB = *(array+2);
-        RB = *(array+3);
-        
-        //绘制起点末端的半圆
-        if (i == 1){
-            Vector3f center((LB.x + RB.x)/2.0f, (LB.y + RB.y)/2.0f, 0);
-            drawRound(RB ,LB ,center);
-        }
-        
-        //绘制终点末端的半圆
-        if (i == pointCount - 1){
-            Vector3f center((LT.x + RT.x)/2.0f, (LT.y + RT.y)/2.0f, 0);
-            drawRound(LT ,RT ,center);
-        }
-        
-        //绘制两个线段之间的转弯过度
-        if (i >= 2){
-            if (curLineDir.y > preLineDir.y || curLineDir.x < -preLineDir.x){
-                //逆时针转，绘制右测转弯
-                drawRound(RB ,preRT ,vStart);
-            } else {
-                //顺时针转，绘制左测转弯
-                drawRound(preLT ,LB ,vStart);
-            }
-        }
-        
-        preLT = LT;
-        preRT = RT;
-        preLineDir = curLineDir;
-    }
-}
-
 
 
 

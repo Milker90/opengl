@@ -30,6 +30,8 @@ public:
     
     void setArrowTexturePath(const char * arrowPath) {mArrowPath = arrowPath;};
     
+    glm::Vector3f screen2openGL2(glm::Vector3f coor);
+    
 private:
     
     void createMultiSampleBuffer();
@@ -44,12 +46,10 @@ private:
     
     void loadLine3DTexture(float lineWidth);
     
-    glm::Vector3f screen2openGL2(glm::Vector3f coor);
-    
-    void drawSegment(glm::Vector3f*glStart ,
-                     glm::Vector3f*glTo,
-                     float lineWidth,
-                     GLfloat* color);
+//    void drawSegment(glm::Vector3f*glStart ,
+//                     glm::Vector3f*glTo,
+//                     float lineWidth,
+//                     GLfloat* color);
     
     void drawAALineFrom(glm::Vector3f start ,
                         glm::Vector3f to ,
@@ -61,8 +61,6 @@ private:
     
     void drawArraysWithTexture(glm::Vector3f* array ,int scale);
     
-    void drawRound(glm::Vector3f from ,glm::Vector3f  to ,glm::Vector3f center);
-    
     void setMVPFor2D(CShader *shader);
     
     void setMVPFor3D(CShader *shader);
@@ -72,10 +70,10 @@ private:
     void switch2D();
     void switch3D();
     
-    void drawLineString(glm::Vector3f*points
-                        ,int pointCount
-                        ,float width
-                        ,GLfloat* color);
+//    void drawLineString(glm::Vector3f*points
+//                        ,int pointCount
+//                        ,float width
+//                        ,GLfloat* color);
     
     void drawRoadLineString(glm::Vector3f *points
                             ,int pointCount

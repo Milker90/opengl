@@ -14,6 +14,7 @@
 #include "glm.h"
 
 class ColorVertexDrawer{
+    
 public:
     ColorVertexDrawer();
     ~ColorVertexDrawer();
@@ -36,4 +37,4 @@ private:
     int mvpLocation;
 };
 
-#endif /* ColorVertexDrawer_hpp */
+#endif

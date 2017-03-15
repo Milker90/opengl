@@ -20,6 +20,7 @@ class CShader{
     
 public:
     CShader(const char * vertex, const char * framgent);
+    ~CShader();
     
     int getAttribLocation(const char* name);
     

@@ -15,6 +15,7 @@
 		7916762C1E77BDB3001D6F0C /* math_type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676241E77BDB3001D6F0C /* math_type.cpp */; };
 		791676301E77EAC7001D6F0C /* ShaderGLSL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */; };
 		791676331E77F94D001D6F0C /* ColorVertexDrawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */; };
+		791676361E78119D001D6F0C /* Line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 791676341E78119D001D6F0C /* Line.cpp */; };
 		792F066F1E0CD4D7009D90BC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F066E1E0CD4D7009D90BC /* main.m */; };
 		792F06721E0CD4D7009D90BC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06711E0CD4D7009D90BC /* AppDelegate.m */; };
 		792F06751E0CD4D7009D90BC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 792F06741E0CD4D7009D90BC /* ViewController.m */; };
@@ -85,6 +86,8 @@
 		7916762F1E77EAC7001D6F0C /* ShaderGLSL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderGLSL.h; path = mapengine/ShaderGLSL.h; sourceTree = "<group>"; };
 		791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorVertexDrawer.cpp; path = mapengine/ColorVertexDrawer.cpp; sourceTree = "<group>"; };
 		791676321E77F94D001D6F0C /* ColorVertexDrawer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ColorVertexDrawer.hpp; path = mapengine/ColorVertexDrawer.hpp; sourceTree = "<group>"; };
+		791676341E78119D001D6F0C /* Line.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Line.cpp; path = mapengine/Line.cpp; sourceTree = "<group>"; };
+		791676351E78119D001D6F0C /* Line.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Line.hpp; path = mapengine/Line.hpp; sourceTree = "<group>"; };
 		792F066A1E0CD4D7009D90BC /* OpenGLForiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLForiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		792F066E1E0CD4D7009D90BC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		792F06701E0CD4D7009D90BC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -209,6 +212,8 @@
 				7916762E1E77EAC7001D6F0C /* ShaderGLSL.cpp */,
 				791676311E77F94D001D6F0C /* ColorVertexDrawer.cpp */,
 				791676321E77F94D001D6F0C /* ColorVertexDrawer.hpp */,
+				791676341E78119D001D6F0C /* Line.cpp */,
+				791676351E78119D001D6F0C /* Line.hpp */,
 			);
 			name = mapengine;
 			sourceTree = "<group>";
@@ -460,6 +465,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				791676021E70FE0A001D6F0C /* LineVertexCalculator.cpp in Sources */,
+				791676361E78119D001D6F0C /* Line.cpp in Sources */,
 				7916761A1E7791E3001D6F0C /* map.cpp in Sources */,
 				79309ED91E10FB320095BA8C /* CC3Kazmath.mm in Sources */,
 				7916761D1E77923C001D6F0C /* MapImp.cpp in Sources */,

@@ -32,6 +32,10 @@ CShader::CShader(const char * vertex, const char * framgent) {
     glUseProgram(_programHandle);
 }
 
+CShader::~CShader(){
+    glDeleteProgram(_programHandle);
+}
+
 void CShader::useProgram(){
     glUseProgram(_programHandle);
 }
